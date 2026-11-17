@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HelpDesk TI</title>
+<link rel="stylesheet" href="/estilo.css">
+</head>
+<body>
+<header>
+  <div><b>HelpDesk TI</b> <span>· versão monolítica</span></div>
+  <div class="usuario" id="barra" hidden><span id="quem"></span><button id="sair" type="button">Sair</button></div>
+</header>
+
+<form class="card login" id="tela-login">
+  <h1>Entrar</h1>
+  <p>Use seu e-mail e senha.</p>
+  <label for="email">E-mail</label><input id="email" type="email" autocomplete="username" required value="carla@empresa.com">
+  <label for="senha">Senha</label><input id="senha" type="password" autocomplete="current-password" required>
+  <p><button type="submit">Entrar</button></p>
+  <div id="erro-login" class="erro"></div>
+  <div class="contas">Contas de exemplo (senha definida em <code>SENHA_EXEMPLO</code>, veja o README):<br>
+    <code>admin@empresa.com</code> administrador · <code>carla@empresa.com</code> técnica · <code>ana@empresa.com</code> solicitante</div>
+</form>
+
+<main id="tela-sistema" hidden>
+  <section>
+    <div class="kpis" id="kpis"></div>
+    <div class="card">
+      <h2>Chamados</h2>
+      <table><thead><tr><th>#</th><th>Chamado</th><th>Prioridade</th><th>Status</th><th>Técnico</th><th>Prazo (SLA)</th><th>Ações</th></tr></thead><tbody id="lista"></tbody></table>
+      <div id="erro" class="erro"></div>
+    </div>
+  </section>
+  <aside class="side">
+    <form class="card" id="novo">
+      <h2>Abrir chamado</h2>
+      <label for="titulo">Título</label><input id="titulo" required minlength="3" maxlength="120" value="Sem acesso à internet">
+      <label for="descricao">Descrição</label><textarea id="descricao" rows="2" required minlength="3" maxlength="2000">O cabo está conectado, mas não navega.</textarea>
+      <label for="prioridade">Prioridade</label><select id="prioridade"><option value="baixa">Baixa (72 h)</option><option value="media">Média (24 h)</option><option value="alta" selected>Alta (8 h)</option><option value="critica">Crítica (4 h)</option></select>
+      <label for="ativo">Equipamento</label><select id="ativo"></select>
+      <p><button type="submit">Abrir chamado</button></p>
+    </form>
+    <div class="card"><h2>Minhas notificações</h2><div id="avisos"></div></div>
+  </aside>
+</main>
+<script src="/app.js"></script>
+</body>
+</html>
