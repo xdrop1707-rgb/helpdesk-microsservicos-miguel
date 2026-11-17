@@ -1,4 +1,4 @@
-FROM python:3.12-slim
+FROM python:3.15-slim
 
 # Não roda como root dentro do contêiner
 RUN useradd --create-home --uid 10001 helpdesk && mkdir /dados && chown helpdesk /dados
