@@ -1,0 +1,102 @@
+services:
+  db-users:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: senha123
+      POSTGRES_DB: users_db
+    volumes:
+      - vol_users:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d users_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  ms-users:
+    build: ./ms-users
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      - DATABASE_URL=postgresql://admin:senha123@db-users:5432/users_db
+      - JWT_SEGREDO=super_segredo_miguel
+      - DADOS_EXEMPLO=1
+    depends_on:
+      db-users:
+        condition: service_healthy
+
+  db-assets:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: senha123
+      POSTGRES_DB: assets_db
+    volumes:
+      - vol_assets:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d assets_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  ms-assets:
+    build: ./ms-assets
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      - DATABASE_URL=postgresql://admin:senha123@db-assets:5432/assets_db
+      - JWT_SEGREDO=super_segredo_miguel
+    depends_on:
+      db-assets:
+        condition: service_healthy
+
+  db-tickets:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: senha123
+      POSTGRES_DB: tickets_db
+    volumes:
+      - vol_tickets:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d tickets_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  ms-tickets:
+    build: ./ms-tickets
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      - DATABASE_URL=postgresql://admin:senha123@db-tickets:5432/tickets_db
+      - JWT_SEGREDO=super_segredo_miguel
+      - USERS_URL=http://ms-users:8001
+      - ASSETS_URL=http://ms-assets:8002
+    depends_on:
+      db-tickets:
+        condition: service_healthy
+      ms-users:
+        condition: service_started
+      ms-assets:
+        condition: service_started
+
+  gateway:
+    build: ./gateway
+    ports:
+      - "8000:8000"
+    depends_on:
+      - ms-users
+      - ms-assets
+      - ms-tickets
+
+volumes:
+  vol_users:
+  vol_assets:
+  vol_tickets:
