@@ -20,6 +20,6 @@ TAMANHO_MAXIMO_REQUISICAO = 64 * 1024
 DOCS_ATIVA = os.getenv("DOCS", "1") == "1"
 
 # URLs dos outros microsserviços (definidas no Docker Compose)
-USUARIOS_URL = os.getenv("USUARIOS_URL", "http://ms-usuarios:8001")
-INVENTARIO_URL = os.getenv("INVENTARIO_URL", "http://ms-inventario:8002")
+USUARIOS_URL = os.getenv("USUARIOS_URL", "http://ms-users:8001")
+INVENTARIO_URL = os.getenv("INVENTARIO_URL", "http://ms-assets:8002")
 REDIS_URL = os.getenv("REDIS_URL", "redis://redis:6379/0")
